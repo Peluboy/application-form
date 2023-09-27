@@ -1,9 +1,10 @@
-import { Card } from "antd";
+import React, { useState } from "react";
+import { Button, Card } from "antd";
 import "../styles/dashboard.css";
 import { Switch, Checkbox } from "antd";
-import { useState } from "react";
 import { RiAddFill } from "react-icons/ri";
 import { inputFields } from "../assets/data/data";
+import QuestionForm from "./QuestionForm"; // Import the QuestionForm component
 
 interface FormData {
   firstName: string;
@@ -37,6 +38,7 @@ const PersonalInformation = () => {
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [switchStates, setSwitchStates] = useState<SwitchState>({});
+  const [isQuestionFormVisible, setIsQuestionFormVisible] = useState(false); // State to control the visibility of the QuestionForm
 
   const handleSwitchToggle = (name: string) => {
     setSwitchStates((prevStates) => ({
@@ -51,6 +53,10 @@ const PersonalInformation = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const handleAddQuestionClick = () => {
+    setIsQuestionFormVisible(true); // Show the QuestionForm when the button is clicked
   };
 
   return (
@@ -98,10 +104,23 @@ const PersonalInformation = () => {
               </div>
             </div>
           ))}
-          <div className="add-questions">
+
+          {isQuestionFormVisible && (
+            <div className="question-form-pt">
+              <QuestionForm
+                onSaveQuestion={(question) => {
+                  // Handle the saved question data here
+                  console.log(question);
+                  setIsQuestionFormVisible(false); // Hide the QuestionForm after saving
+                }}
+              />
+            </div>
+          )}
+
+          <Button className="add-questions" onClick={handleAddQuestionClick}>
             <RiAddFill size="20px" />
             <span>Add a question</span>
-          </div>
+          </Button>
         </form>
       </Card>
     </div>

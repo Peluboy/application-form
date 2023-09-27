@@ -38,6 +38,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
   font-weight: 600;
   font-size: 12px;
 }
@@ -127,5 +128,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-top: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+.question-form-pt {
+  margin-top: 2.5rem;
 }
