@@ -19,6 +19,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             Card: {
               headerBg: "#D0F7FA",
             },
+            Button: {
+              primaryShadow: "0",
+            },
           },
         }}
       >

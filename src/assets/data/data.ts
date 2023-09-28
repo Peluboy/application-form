@@ -22,6 +22,7 @@ export const inputFields: {
     label: "Nationality",
     hasCheckbox: true,
     hasSwitch: true,
+    switchLabel: "Hide",
   },
   {
     name: "currentResidence",
@@ -35,6 +36,7 @@ export const inputFields: {
     label: "ID Number",
     hasCheckbox: true,
     hasSwitch: true,
+    switchLabel: "Hide",
   },
   {
     name: "dateOfBirth",
@@ -43,7 +45,13 @@ export const inputFields: {
     hasCheckbox: true,
     switchLabel: "Hide",
   },
-  { name: "gender", label: "Gender", hasCheckbox: true, hasSwitch: true },
+  {
+    name: "gender",
+    label: "Gender",
+    hasCheckbox: true,
+    hasSwitch: true,
+    switchLabel: "Hide",
+  },
 ];
 
 export const profileFields: {

@@ -2,8 +2,13 @@ import { Card } from "antd";
 import "../styles/questions.css";
 import { AnyQuestion } from "./QuestionForm";
 import QuestionDisplay from "./QuestionDisplay";
+import { useState } from "react";
 
-const Questions = () => {
+export interface QuestionsProps {
+  onQuestionsDataChange: (questionsData: any) => void;
+}
+
+const Questions: React.FC<QuestionsProps> = ({ onQuestionsDataChange }) => {
   const initialQuestions: AnyQuestion[] = [
     {
       type: "Paragraph",
@@ -19,6 +24,14 @@ const Questions = () => {
     },
   ];
 
+  const [questionsData, setQuestionsData] =
+    useState<AnyQuestion[]>(initialQuestions);
+
+  const handleQuestionsDataChange = (newData: AnyQuestion[]) => {
+    setQuestionsData(newData);
+    onQuestionsDataChange(newData);
+  };
+
   return (
     <>
       <Card
@@ -27,9 +40,10 @@ const Questions = () => {
         style={{ width: 500, fontSize: "14px" }}
       >
         <QuestionDisplay
-          initialQuestions={initialQuestions}
+          initialQuestions={questionsData}
           onSaveQuestion={(question) => {
-            // console.log(question);
+            const updatedQuestions = [...questionsData, question];
+            handleQuestionsDataChange(updatedQuestions);
           }}
         />
       </Card>

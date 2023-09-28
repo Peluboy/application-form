@@ -4,6 +4,7 @@ import "../styles/dashboard.css";
 import { Switch, Checkbox } from "antd";
 import { inputFields } from "../assets/data/data";
 import QuestionDisplay from "./QuestionDisplay";
+import { AnyQuestion } from "./QuestionForm";
 
 interface FormData {
   firstName: string;
@@ -22,7 +23,13 @@ interface SwitchState {
   [key: string]: boolean;
 }
 
-const PersonalInformation = () => {
+interface PersonalInformationProps {
+  onFormDataChange: (formData: FormData) => void;
+}
+
+const PersonalInformation: React.FC<PersonalInformationProps> = ({
+  onFormDataChange,
+}) => {
   const initialFormData: FormData = {
     firstName: "",
     lastName: "",
@@ -37,6 +44,8 @@ const PersonalInformation = () => {
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [switchStates, setSwitchStates] = useState<SwitchState>({});
+  const [personalInformationQuestions, setPersonalInformationQuestions] =
+    useState<AnyQuestion[]>([]);
 
   const handleSwitchToggle = (name: string) => {
     setSwitchStates((prevStates) => ({
@@ -45,12 +54,19 @@ const PersonalInformation = () => {
     }));
   };
 
+  const handleAddPersonalInformationQuestion = (question: AnyQuestion) => {
+    const updatedQuestions = [...personalInformationQuestions, question];
+    setPersonalInformationQuestions(updatedQuestions);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
+
+    onFormDataChange({ ...formData, [name]: value });
   };
 
   return (
@@ -101,9 +117,8 @@ const PersonalInformation = () => {
 
           <div className="additional-questions">
             <QuestionDisplay
-              onSaveQuestion={(question) => {
-                console.log(question);
-              }}
+              initialQuestions={personalInformationQuestions}
+              onSaveQuestion={handleAddPersonalInformationQuestion}
             />
           </div>
         </form>

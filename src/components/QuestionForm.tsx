@@ -63,7 +63,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
   const handleQuestionTextChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setQuestionText(e.target.value);
+    const newText = e.target.value;
+    setQuestionText(newText);
   };
 
   const handleOptionChange = (
@@ -131,6 +132,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
     "Yes/No",
     "Multiple choice",
     "Date",
+    "Dropdown",
     "Number",
     "File upload",
     "Video question",
@@ -142,10 +144,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
     setOptions([...options, { id: `${options.length}`, text: "" }]);
   };
 
-  const renderVideoQuestionFields = () => {
-    if (selectedQuestionType === "Video question") {
-      return (
-        <div className="video-question-container">
+  const renderQuestionInput = () => {
+    switch (selectedQuestionType) {
+      case "Paragraph":
+      case "Short answer":
+      case "Dropdown":
+      case "Yes/No":
+      case "Date":
+      case "Number":
+      case "File upload":
+        return (
           <div className="input-field-container">
             <label className="question-label">Questions</label>
             <input
@@ -155,46 +163,17 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
               onChange={handleQuestionTextChange}
             />
           </div>
-          <div className="input-field-container">
-            <textarea
-              placeholder="Please talk about your achievements, goals and what you worked on as the latest project"
-              value={textArea}
-              onChange={(e) => setTextArea(e.target.value)}
-            />
-          </div>
-          <div className="time-durations">
-            <div className="input-field-container">
-              <input
-                type="number"
-                placeholder="Max duration of video"
-                value={maxDuration || ""}
-                onChange={(e) => setMaxDuration(parseInt(e.target.value))}
-              />
-            </div>
-            <div className="input-field-container">
-              <CustomDropdown
-                options={timeTypes}
-                onSelect={(selectedOption: string) =>
-                  setSelectedTimeType(selectedOption)
-                }
-              />
-            </div>
-          </div>
-        </div>
-      );
+        );
+      case "Video question":
+        return renderVideoQuestionFields();
+      case "Multiple choice":
+        return renderMultipleChoiceFields();
+      default:
+        return null;
     }
-    return null;
   };
 
-  const MultipleChoiceQuestion: React.FC<{
-    options: QuestionOption[];
-    onAddOption: () => void;
-    onDeleteOption: (id: string) => void;
-    onOptionChange: (
-      e: React.ChangeEvent<HTMLInputElement>,
-      index: number
-    ) => void;
-  }> = ({ options, onAddOption, onDeleteOption, onOptionChange }) => {
+  const renderMultipleChoiceFields = () => {
     return (
       <div className="multiple-choice-container">
         <div className="input-field-container">
@@ -219,13 +198,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
                       name="answers"
                       placeholder="Type here"
                       value={option.text}
-                      onChange={(e) => onOptionChange(e, index)}
+                      onChange={(e) => handleOptionChange(e, index)}
                     />
                   </div>
-                  <div onClick={onAddOption}>
+                  <div onClick={handleAddOption}>
                     <RxPlus />
                   </div>
-                  <div onClick={() => onDeleteOption(option.id)}>
+                  <div onClick={() => handleDeleteOption(option.id)}>
                     <RiDeleteBin6Line />
                   </div>
                 </div>
@@ -236,7 +215,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
             <Checkbox>Enable 'Other' options</Checkbox>
             <div className="max-choice-allowed">
               <label className="question-label">Max Choice allowed</label>
-              <input type="number" placeholder="0" />
+              <input
+                type="number"
+                placeholder="Enter number of choice allowed here"
+              />
             </div>
           </div>
         </div>
@@ -244,60 +226,45 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
     );
   };
 
-  const renderQuestionInput = () => {
-    switch (selectedQuestionType) {
-      case "Paragraph":
-        return (
+  const renderVideoQuestionFields = () => {
+    return (
+      <div className="video-question-container">
+        <div className="input-field-container">
+          <label className="question-label">Questions</label>
+          <input
+            type="text"
+            placeholder="Enter question"
+            value={questionText}
+            onChange={handleQuestionTextChange}
+          />
+        </div>
+        <div className="input-field-container">
+          <textarea
+            placeholder="Please talk about your achievements, goals and what you worked on as the latest project"
+            value={textArea}
+            onChange={(e) => setTextArea(e.target.value)}
+          />
+        </div>
+        <div className="time-durations">
           <div className="input-field-container">
-            <label className="question-label">Questions</label>
             <input
-              type="text"
-              placeholder="Enter question"
-              value={questionText}
-              onChange={handleQuestionTextChange}
+              type="number"
+              placeholder="Max duration of video"
+              value={maxDuration || ""}
+              onChange={(e) => setMaxDuration(parseInt(e.target.value))}
             />
           </div>
-        );
-      case "Short answer":
-        return (
           <div className="input-field-container">
-            <label className="question-label">Questions</label>
-            <input
-              type="text"
-              placeholder="Enter question"
-              value={questionText}
-              onChange={handleQuestionTextChange}
+            <CustomDropdown
+              options={timeTypes}
+              onSelect={(selectedOption: string) =>
+                setSelectedTimeType(selectedOption)
+              }
             />
           </div>
-        );
-      case "Dropdown":
-        return (
-          <div className="input-field-container">
-            <label className="question-label">Questions</label>
-            <input
-              type="text"
-              placeholder="Enter question"
-              value={questionText}
-              onChange={handleQuestionTextChange}
-            />
-          </div>
-        );
-      case "Yes/No":
-        return (
-          <div className="input-field-container">
-            <label className="question-label">Questions</label>
-            <input
-              type="text"
-              placeholder="Enter question"
-              value={questionText}
-              onChange={handleQuestionTextChange}
-            />
-          </div>
-        );
-
-      default:
-        return null;
-    }
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -308,15 +275,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSaveQuestion }) => {
       />
 
       <div className="input-field-container">{renderQuestionInput()}</div>
-      {renderVideoQuestionFields()}
-      {selectedQuestionType === "Multiple choice" && (
-        <MultipleChoiceQuestion
-          options={options}
-          onAddOption={handleAddOption}
-          onDeleteOption={handleDeleteOption}
-          onOptionChange={handleOptionChange}
-        />
-      )}
       <div className="button-container">
         <div className="delete-reupload" onClick={handleDeleteQuestion}>
           <RiCloseLine size="20px" />

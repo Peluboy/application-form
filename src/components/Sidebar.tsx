@@ -36,7 +36,7 @@ const Sidebar = () => {
       </div>
 
       <div className="sidebar-bottom">
-        <div className="initials">AS</div>
+        <div className="initials">NT</div>
       </div>
     </section>
   );

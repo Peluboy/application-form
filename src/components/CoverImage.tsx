@@ -1,10 +1,13 @@
-import { Card } from "antd";
 import React, { useState, useRef } from "react";
-import "../styles/dashboard.css";
+import { Card } from "antd";
 import { FiUpload } from "react-icons/fi";
 import { RiCloseLine } from "react-icons/ri";
 
-const CoverImage = () => {
+interface CoverImageProps {
+  onCoverImageChange: (file: File | null) => void;
+}
+
+const CoverImage: React.FC<CoverImageProps> = ({ onCoverImageChange }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -17,10 +20,12 @@ const CoverImage = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if (file) {
+    if (file !== undefined) {
       const imageUrl = URL.createObjectURL(file);
       setImagePreview(imageUrl);
     }
+
+    onCoverImageChange(file || null);
   };
 
   return (

@@ -3,19 +3,35 @@ import { Card, Switch, Checkbox } from "antd";
 import { profileFields } from "../assets/data/data";
 import QuestionDisplay from "./QuestionDisplay";
 import "../styles/dashboard.css";
+import { AnyQuestion } from "./QuestionForm";
 
 interface SwitchState {
   [key: string]: boolean;
 }
 
-const Profile = () => {
+interface ProfileProps {
+  onProfileDataChange: (profileData: any) => void;
+}
+
+const Profile: React.FC<ProfileProps> = ({ onProfileDataChange }) => {
   const [switchStates, setSwitchStates] = useState<SwitchState>({});
+  const [profileQuestions, setProfileQuestions] = useState<AnyQuestion[]>([]);
 
   const handleSwitchToggle = (name: string) => {
     setSwitchStates((prevStates) => ({
       ...prevStates,
       [name]: !prevStates[name],
     }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    onProfileDataChange({ [name]: value });
+  };
+
+  const handleAddProfileQuestion = (question: AnyQuestion) => {
+    const updatedQuestions = [...profileQuestions, question];
+    setProfileQuestions(updatedQuestions);
   };
 
   return (
@@ -33,6 +49,7 @@ const Profile = () => {
                 placeholder={field.label}
                 name={field.name}
                 id={field.name}
+                onChange={handleInputChange}
                 required
               />
               <label htmlFor={field.name} className="form__label">
@@ -62,9 +79,8 @@ const Profile = () => {
           ))}
           <div className="additional-questions">
             <QuestionDisplay
-              onSaveQuestion={(question) => {
-                console.log(question);
-              }}
+              initialQuestions={profileQuestions}
+              onSaveQuestion={handleAddProfileQuestion}
             />
           </div>
         </form>
