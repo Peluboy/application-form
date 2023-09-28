@@ -1,14 +1,35 @@
+import React, { useState } from "react";
 import "../styles/header.css";
 
 const Header = () => {
+  const [activeItem, setActiveItem] = useState("Application Form");
+
+  const navItems = [
+    "Program Details",
+    "Application Form",
+    "Workflow",
+    "Preview",
+  ];
+
+  const handleItemClick = (item: string) => {
+    setActiveItem(item);
+  };
+
   return (
     <header className="header-container">
-      <div className="left-header">
-        <h3>London Internship Program</h3>
-        <p className="london-paragraph">London</p>
-      </div>
-      <div className="middle-header"></div>
-      <div className="right-header"></div>
+      <nav>
+        <ul className="nav-list">
+          {navItems.map((item, index) => (
+            <li
+              key={index}
+              className={`nav-item${item === activeItem ? " active" : ""}`}
+              onClick={() => handleItemClick(item)}
+            >
+              {item}
+            </li>
+          ))}
+        </ul>
+      </nav>
     </header>
   );
 };

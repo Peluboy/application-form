@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Button, Card } from "antd";
+import { Card } from "antd";
 import "../styles/dashboard.css";
 import { Switch, Checkbox } from "antd";
-import { RiAddFill } from "react-icons/ri";
 import { inputFields } from "../assets/data/data";
-import QuestionForm from "./QuestionForm"; // Import the QuestionForm component
+import QuestionDisplay from "./QuestionDisplay";
 
 interface FormData {
   firstName: string;
@@ -38,7 +37,6 @@ const PersonalInformation = () => {
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [switchStates, setSwitchStates] = useState<SwitchState>({});
-  const [isQuestionFormVisible, setIsQuestionFormVisible] = useState(false); // State to control the visibility of the QuestionForm
 
   const handleSwitchToggle = (name: string) => {
     setSwitchStates((prevStates) => ({
@@ -53,10 +51,6 @@ const PersonalInformation = () => {
       ...formData,
       [name]: value,
     });
-  };
-
-  const handleAddQuestionClick = () => {
-    setIsQuestionFormVisible(true); // Show the QuestionForm when the button is clicked
   };
 
   return (
@@ -105,22 +99,13 @@ const PersonalInformation = () => {
             </div>
           ))}
 
-          {isQuestionFormVisible && (
-            <div className="question-form-pt">
-              <QuestionForm
-                onSaveQuestion={(question) => {
-                  // Handle the saved question data here
-                  console.log(question);
-                  setIsQuestionFormVisible(false); // Hide the QuestionForm after saving
-                }}
-              />
-            </div>
-          )}
-
-          <Button className="add-questions" onClick={handleAddQuestionClick}>
-            <RiAddFill size="20px" />
-            <span>Add a question</span>
-          </Button>
+          <div className="additional-questions">
+            <QuestionDisplay
+              onSaveQuestion={(question) => {
+                console.log(question);
+              }}
+            />
+          </div>
         </form>
       </Card>
     </div>

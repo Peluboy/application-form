@@ -43,7 +43,7 @@
   font-size: 12px;
 }
 
-/* .form__group */
+/* ---------- form styling ------------------*/
 .form__group {
   position: relative;
   padding: 15px 0 0;
@@ -56,7 +56,6 @@
   border-bottom: none;
 }
 
-/* .form__field */
 .form__field {
   font-family: inherit;
   width: 100%;
@@ -79,7 +78,6 @@
   top: 20px;
 }
 
-/* .form__label */
 .form__label {
   position: absolute;
   top: 6px;
@@ -90,20 +88,19 @@
   color: black;
 }
 
-/* .form__field:focus */
 .form__field:focus {
   padding-bottom: 6px;
   font-weight: 700;
   border-width: 1.3px;
-  /* border-image: linear-gradient(to right, var(--primary), var(--secondary)); */
   border-image-slice: 1;
 }
 
-/* Reset input */
 .form__field:required,
 .form__field:invalid {
   box-shadow: none;
 }
+
+/* -------------------------- */
 
 .checkbox-switch {
   display: flex;
@@ -133,4 +130,8 @@
 
 .question-form-pt {
   margin-top: 2.5rem;
+}
+
+.additional-questions {
+  margin-top: 1rem;
 }

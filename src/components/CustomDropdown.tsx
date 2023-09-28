@@ -1,40 +1,69 @@
-// CustomDropdown.tsx
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "../styles/customdashboard.css";
+import { FaAngleUp, FaAngleDown } from "react-icons/fa";
 
 interface CustomDropdownProps {
-  options: string[]; // Define the options as an array of strings
-  onSelect: (selectedOption: string) => void; // Define the onSelect callback function
+  options: string[];
+  onSelect: (selectedOption: string) => void;
 }
 
 const CustomDropdown: React.FC<CustomDropdownProps> = ({
   options,
   onSelect,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(options[0]); // Initialize with the first option
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleOptionChange = (option: string) => {
     setSelectedOption(option);
-    onSelect(option); // Call the provided onSelect callback
+    onSelect(option);
+    setIsOpen(false);
   };
 
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="select" tabIndex={1}>
-      {options.map((option) => (
-        <React.Fragment key={option}>
-          <input
-            type="radio"
-            className="selectopt"
-            name="dropdownOptions"
-            id={option}
-            checked={selectedOption === option}
-            onChange={() => handleOptionChange(option)}
-          />
-          <label htmlFor={option} className="option">
-            {option}
-          </label>
-        </React.Fragment>
-      ))}
+    <div className={`custom-dropdown ${isOpen ? "active" : ""}`}>
+      <div className="selected-option" onClick={toggleDropdown}>
+        {selectedOption} {isOpen ? <FaAngleUp /> : <FaAngleDown />}
+      </div>
+      {isOpen && (
+        <div className="dropdown-options" ref={dropdownRef}>
+          {options.map((option) => (
+            <div
+              key={option}
+              className="option"
+              onClick={() => handleOptionChange(option)}
+            >
+              {option}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

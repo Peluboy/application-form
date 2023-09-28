@@ -2,6 +2,7 @@ import "../styles/layout.css";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import Routers from "../routers/Routers";
+import Scrollbars from "react-custom-scrollbars-2";
 
 const Layout = () => {
   return (
@@ -13,7 +14,9 @@ const Layout = () => {
         <Sidebar />
       </div>
       <div className="content">
-        <Routers />
+        <Scrollbars style={{ width: "100%", height: "100%" }}>
+          <Routers />
+        </Scrollbars>
       </div>
     </div>
   );

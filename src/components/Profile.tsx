@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Card, Switch, Checkbox } from "antd";
-import { RiAddFill } from "react-icons/ri";
 import { profileFields } from "../assets/data/data";
+import QuestionDisplay from "./QuestionDisplay";
+import "../styles/dashboard.css";
 
 interface SwitchState {
   [key: string]: boolean;
@@ -59,9 +60,12 @@ const Profile = () => {
               </div>
             </div>
           ))}
-          <div className="add-questions">
-            <RiAddFill size="20px" />
-            <span>Add a question</span>
+          <div className="additional-questions">
+            <QuestionDisplay
+              onSaveQuestion={(question) => {
+                console.log(question);
+              }}
+            />
           </div>
         </form>
       </Card>
